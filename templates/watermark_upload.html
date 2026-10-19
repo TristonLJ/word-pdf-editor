@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Watermark PDF · Word → PDF Editor{% endblock %}
+{% block content %}
+  <section class="editor-toolbar">
+    <a class="back-link" href="{{ url_for('tools_hub') }}"><svg class="icon"><use href="#icon-arrow-left"/></svg> Back</a>
+    <h2>Watermark PDF</h2>
+  </section>
+
+  <div class="action-card tool-form-card">
+    <span class="action-icon"><svg class="icon"><use href="#icon-droplet"/></svg></span>
+    <p class="hint">Upload a PDF, then choose the watermark text or image.</p>
+    <form action="/tools/watermark-pdf" method="post" enctype="multipart/form-data">
+      <input type="file" name="file" accept=".pdf" required>
+      <button class="btn btn-primary btn-block" type="submit">
+        <svg class="icon"><use href="#icon-droplet"/></svg> Upload &amp; continue
+      </button>
+    </form>
+  </div>
+{% endblock %}

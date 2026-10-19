@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}HTML to PDF · Word → PDF Editor{% endblock %}
+{% block content %}
+  <section class="editor-toolbar">
+    <a class="back-link" href="{{ url_for('tools_hub') }}"><svg class="icon"><use href="#icon-arrow-left"/></svg> Back</a>
+    <h2>HTML to PDF</h2>
+  </section>
+
+  <div class="action-card tool-form-card">
+    <span class="action-icon"><svg class="icon"><use href="#icon-globe"/></svg></span>
+    <p class="hint">Convert a webpage by URL, or paste HTML directly.</p>
+    <form action="/tools/html-to-pdf" method="post">
+      <label class="field-label">
+        Page URL
+        <input type="text" name="url" placeholder="https://example.com">
+      </label>
+      <label class="field-label">
+        ...or paste HTML instead
+        <textarea name="html" rows="6" placeholder="&lt;html&gt;...&lt;/html&gt;"></textarea>
+      </label>
+      <button class="btn btn-primary btn-block" type="submit">
+        <svg class="icon"><use href="#icon-globe"/></svg> Convert to PDF
+      </button>
+    </form>
+  </div>
+{% endblock %}

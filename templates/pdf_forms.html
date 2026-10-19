@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}PDF Forms: {{ filename }} · Word → PDF Editor{% endblock %}
+{% block content %}
+  <section class="editor-toolbar">
+    <a class="back-link" href="{{ url_for('tools_hub') }}"><svg class="icon"><use href="#icon-arrow-left"/></svg> Back</a>
+    <h2>{{ "Fill" if mode == "fill" else "Create" }} form: {{ filename }}</h2>
+    <div class="editor-actions">
+      <span id="status" class="status"></span>
+      <button id="save-btn" class="btn btn-primary" type="button">
+        <svg class="icon"><use href="#icon-save"/></svg> {{ "Save filled PDF" if mode == "fill" else "Save form" }}
+      </button>
+    </div>
+  </section>
+
+  {% if mode == "create" %}
+    <div class="sign-layout">
+      <div class="sign-page-panel">
+        <div class="page-nav">
+          <button id="prev-page" class="btn btn-secondary btn-icon" type="button"><svg class="icon"><use href="#icon-chevron-left"/></svg></button>
+          <span id="page-indicator">Page 1 of {{ page_count }}</span>
+          <button id="next-page" class="btn btn-secondary btn-icon" type="button"><svg class="icon"><use href="#icon-chevron-right"/></svg></button>
+        </div>
+        <div id="page-container" class="page-container">
+          <img id="page-image" src="" alt="Document page">
+        </div>
+      </div>
+      <div class="sign-pad-panel">
+        <h3>Add a field</h3>
+        <label class="field-label">
+          Field type
+          <select id="field-type">
+            <option value="text">Text field</option>
+            <option value="checkbox">Checkbox</option>
+            <option value="dropdown">Dropdown</option>
+          </select>
+        </label>
+        <label class="field-label">
+          Field name
+          <input type="text" id="field-name" placeholder="e.g. full_name">
+        </label>
+        <label class="field-label" id="dropdown-options-wrap" hidden>
+          Options (comma separated)
+          <input type="text" id="field-options" placeholder="Option A, Option B">
+        </label>
+        <p class="format-note">Click and drag on the page to place the field.</p>
+      </div>
+    </div>
+  {% else %}
+    <div class="page-nav">
+      <button id="prev-page" class="btn btn-secondary btn-icon" type="button"><svg class="icon"><use href="#icon-chevron-left"/></svg></button>
+      <span id="page-indicator">Page 1 of {{ page_count }}</span>
+      <button id="next-page" class="btn btn-secondary btn-icon" type="button"><svg class="icon"><use href="#icon-chevron-right"/></svg></button>
+    </div>
+    <p class="format-note">Fill in the fields directly on the page, then save.</p>
+    <div id="page-container" class="page-container">
+      <img id="page-image" src="" alt="Document page">
+    </div>
+  {% endif %}
+
+  <script>
+    window.PDF_FILENAME = {{ filename | tojson }};
+    window.PAGE_COUNT = {{ page_count | tojson }};
+    window.FORM_MODE = {{ mode | tojson }};
+    window.EXISTING_FIELDS = {{ existing_fields | tojson }};
+  </script>
+  <script src="{{ url_for('static', filename='js/pdf_forms.js') }}"></script>
+{% endblock %}

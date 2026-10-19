@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}{{ cfg.label }} · Word → PDF Editor{% endblock %}
+{% block content %}
+  <section class="editor-toolbar">
+    <a class="back-link" href="{{ url_for('tools_hub') }}"><svg class="icon"><use href="#icon-arrow-left"/></svg> Back</a>
+    <h2>{{ cfg.label }}</h2>
+  </section>
+
+  <div class="action-card tool-form-card">
+    <span class="action-icon"><svg class="icon"><use href="#{{ cfg.icon }}"/></svg></span>
+    <p class="hint">{{ cfg.hint }}</p>
+    <form action="/tools/{{ slug }}" method="post" enctype="multipart/form-data">
+      <input type="file" name="file" accept="{{ cfg.accept }}" required>
+      {% for field in cfg.fields %}
+        <label class="field-label">
+          {{ field.label }}
+          {% if field.type == "select" %}
+            <select name="{{ field.name }}">
+              {% for value, label in field.options %}
+                <option value="{{ value }}">{{ label }}</option>
+              {% endfor %}
+            </select>
+          {% else %}
+            <input type="{{ field.type }}" name="{{ field.name }}">
+          {% endif %}
+        </label>
+      {% endfor %}
+      <button class="btn btn-primary btn-block" type="submit">
+        <svg class="icon"><use href="#{{ cfg.icon }}"/></svg> Run
+      </button>
+    </form>
+  </div>
+{% endblock %}

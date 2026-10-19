@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Editing {{ filename }} · Word → PDF Editor{% endblock %}
+{% block head %}
+  <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet">
+{% endblock %}
+{% block content %}
+  <section class="editor-toolbar">
+    <a class="back-link" href="{{ url_for('index') }}"><svg class="icon"><use href="#icon-arrow-left"/></svg> Back</a>
+    <h2>{{ filename }}</h2>
+    <div class="editor-actions">
+      <span id="status" class="status"></span>
+      <button id="save-btn" class="btn btn-secondary" type="button"><svg class="icon"><use href="#icon-save"/></svg> Save</button>
+      <button id="export-btn" class="btn btn-primary" type="button"><svg class="icon"><use href="#icon-file-pdf"/></svg> Export PDF</button>
+    </div>
+  </section>
+
+  <p class="format-note">Saving rewrites this document through a simplified format — complex formatting/styles may change. Exporting without saving preserves the original file exactly.</p>
+
+  <div id="editor-container">{{ content_html | safe }}</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
+  <script>
+    window.DOC_FILENAME = {{ filename | tojson }};
+  </script>
+  <script src="{{ url_for('static', filename='js/editor.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Crop {{ filename }} · Word → PDF Editor{% endblock %}
+{% block content %}
+  <section class="editor-toolbar">
+    <a class="back-link" href="{{ url_for('tools_hub') }}"><svg class="icon"><use href="#icon-arrow-left"/></svg> Back</a>
+    <h2>Crop {{ filename }}</h2>
+    <div class="editor-actions">
+      <span id="status" class="status"></span>
+      <button id="apply-btn" class="btn btn-primary" type="button" disabled>
+        <svg class="icon"><use href="#icon-crop"/></svg> Apply crop
+      </button>
+    </div>
+  </section>
+
+  <p class="format-note">Drag on the page to draw the crop area (applied to every page), then drag the handle to resize.</p>
+  <div id="page-container" class="page-container">
+    <img id="page-image" src="/page-image/{{ filename }}/0" alt="Page 1">
+  </div>
+
+  <script>
+    window.PDF_FILENAME = {{ filename | tojson }};
+  </script>
+  <script src="{{ url_for('static', filename='js/crop.js') }}"></script>
+{% endblock %}

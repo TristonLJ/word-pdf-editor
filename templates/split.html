@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Split PDF · Word → PDF Editor{% endblock %}
+{% block content %}
+  <section class="editor-toolbar">
+    <a class="back-link" href="{{ url_for('tools_hub') }}"><svg class="icon"><use href="#icon-arrow-left"/></svg> Back</a>
+    <h2>Split PDF</h2>
+  </section>
+
+  <div class="action-card tool-form-card">
+    <span class="action-icon"><svg class="icon"><use href="#icon-split"/></svg></span>
+    <p class="hint">Enter page ranges to split out, e.g. "1-3, 5, 7-9". More than one range downloads as a zip.</p>
+    <form action="/tools/split-pdf" method="post" enctype="multipart/form-data">
+      <input type="file" name="file" accept=".pdf" required>
+      <label class="field-label">
+        Page ranges
+        <input type="text" name="ranges" placeholder="1-3, 5, 7-9" required>
+      </label>
+      <button class="btn btn-primary btn-block" type="submit">
+        <svg class="icon"><use href="#icon-split"/></svg> Split
+      </button>
+    </form>
+  </div>
+{% endblock %}

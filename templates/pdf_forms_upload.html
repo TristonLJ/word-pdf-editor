@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}PDF Forms · Word → PDF Editor{% endblock %}
+{% block content %}
+  <section class="editor-toolbar">
+    <a class="back-link" href="{{ url_for('tools_hub') }}"><svg class="icon"><use href="#icon-arrow-left"/></svg> Back</a>
+    <h2>PDF Forms</h2>
+  </section>
+
+  <div class="action-card tool-form-card">
+    <span class="action-icon"><svg class="icon"><use href="#icon-grid"/></svg></span>
+    <p class="hint">Upload a PDF. If it already has form fields, you'll fill them in. Otherwise, you can add new fields.</p>
+    <form action="/tools/pdf-forms" method="post" enctype="multipart/form-data">
+      <input type="file" name="file" accept=".pdf" required>
+      <button class="btn btn-primary btn-block" type="submit">
+        <svg class="icon"><use href="#icon-grid"/></svg> Upload
+      </button>
+    </form>
+  </div>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Watermark {{ filename }} · Word → PDF Editor{% endblock %}
+{% block content %}
+  <section class="editor-toolbar">
+    <a class="back-link" href="{{ url_for('tools_hub') }}"><svg class="icon"><use href="#icon-arrow-left"/></svg> Back</a>
+    <h2>Watermark {{ filename }}</h2>
+  </section>
+
+  <div class="action-card tool-form-card">
+    <span class="action-icon"><svg class="icon"><use href="#icon-droplet"/></svg></span>
+    <p class="hint">Add text or an image watermark to every page.</p>
+    <form action="/tools/watermark-pdf/{{ filename }}" method="post" enctype="multipart/form-data">
+      <label class="field-label">
+        Watermark text
+        <input type="text" name="text" placeholder="e.g. CONFIDENTIAL">
+      </label>
+      <label class="field-label">
+        ...or an image instead
+        <input type="file" name="image" accept=".jpg,.jpeg,.png">
+      </label>
+      <label class="field-label">
+        Opacity
+        <input type="range" name="opacity" min="0.1" max="0.7" step="0.05" value="0.3">
+      </label>
+      <button class="btn btn-primary btn-block" type="submit">
+        <svg class="icon"><use href="#icon-droplet"/></svg> Apply watermark
+      </button>
+    </form>
+  </div>
+{% endblock %}

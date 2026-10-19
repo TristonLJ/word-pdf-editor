@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Merge PDF · Word → PDF Editor{% endblock %}
+{% block content %}
+  <section class="editor-toolbar">
+    <a class="back-link" href="{{ url_for('tools_hub') }}"><svg class="icon"><use href="#icon-arrow-left"/></svg> Back</a>
+    <h2>Merge PDF</h2>
+  </section>
+
+  <div class="action-card tool-form-card">
+    <span class="action-icon"><svg class="icon"><use href="#icon-merge"/></svg></span>
+    <p class="hint">Add two or more PDFs, reorder them, then merge.</p>
+    <input type="file" id="file-input" accept=".pdf" multiple>
+    <ul id="file-list" class="file-list"></ul>
+    <span id="status" class="status"></span>
+    <button id="submit-btn" class="btn btn-primary btn-block" type="button" disabled>
+      <svg class="icon"><use href="#icon-merge"/></svg> Merge
+    </button>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/file_list.js') }}"></script>
+  <script>
+    initFileList({
+      inputId: "file-input",
+      listId: "file-list",
+      submitBtnId: "submit-btn",
+      fieldName: "files",
+      endpoint: "/tools/merge-pdf",
+      minFiles: 2,
+    });
+  </script>
+{% endblock %}

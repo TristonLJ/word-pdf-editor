@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}Edit {{ filename }} · Word → PDF Editor{% endblock %}
+{% block content %}
+  <section class="editor-toolbar">
+    <a class="back-link" href="{{ url_for('tools_hub') }}"><svg class="icon"><use href="#icon-arrow-left"/></svg> Back</a>
+    <h2>Edit {{ filename }}</h2>
+    <div class="editor-actions">
+      <span id="status" class="status"></span>
+      <button id="save-btn" class="btn btn-primary" type="button">
+        <svg class="icon"><use href="#icon-save"/></svg> Save
+      </button>
+    </div>
+  </section>
+
+  <div class="sign-layout">
+    <div class="sign-page-panel">
+      <div class="page-nav">
+        <button id="prev-page" class="btn btn-secondary btn-icon" type="button"><svg class="icon"><use href="#icon-chevron-left"/></svg></button>
+        <span id="page-indicator">Page 1 of {{ page_count }}</span>
+        <button id="next-page" class="btn btn-secondary btn-icon" type="button"><svg class="icon"><use href="#icon-chevron-right"/></svg></button>
+      </div>
+      <div id="page-container" class="page-container">
+        <img id="page-image" src="" alt="Document page">
+        <canvas id="freehand-canvas"></canvas>
+      </div>
+    </div>
+
+    <div class="sign-pad-panel">
+      <h3>Add to page</h3>
+      <div class="edit-mode-grid">
+        <button type="button" class="edit-mode-btn active" data-mode="text"><svg class="icon"><use href="#icon-edit"/></svg> Text</button>
+        <button type="button" class="edit-mode-btn" data-mode="image"><svg class="icon"><use href="#icon-image"/></svg> Image</button>
+        <button type="button" class="edit-mode-btn" data-mode="rect"><svg class="icon"><use href="#icon-crop"/></svg> Shape</button>
+        <button type="button" class="edit-mode-btn" data-mode="freehand"><svg class="icon"><use href="#icon-pen"/></svg> Draw</button>
+      </div>
+
+      <div id="text-options" class="edit-options">
+        <label class="field-label">Text
+          <input type="text" id="text-value" placeholder="Type here">
+        </label>
+        <label class="field-label">Font size
+          <input type="number" id="text-font-size" value="16" min="6" max="96">
+        </label>
+        <label class="field-label">Font
+          <select id="text-font">
+            <option value="helvetica">Helvetica</option>
+            <option value="times">Times</option>
+            <option value="courier">Courier</option>
+          </select>
+        </label>
+        <label class="field-label">Color
+          <input type="color" id="text-color" value="#000000">
+        </label>
+      </div>
+
+      <div id="image-options" class="edit-options" hidden>
+        <label class="field-label">Image
+          <input type="file" id="image-file" accept=".jpg,.jpeg,.png">
+        </label>
+      </div>
+
+      <div id="rect-options" class="edit-options" hidden>
+        <label class="field-label">Color
+          <input type="color" id="rect-color" value="#e11d48">
+        </label>
+        <label class="field-label-inline">
+          <input type="checkbox" id="rect-fill"> Fill shape
+        </label>
+      </div>
+
+      <div id="freehand-options" class="edit-options" hidden>
+        <label class="field-label">Color
+          <input type="color" id="freehand-color" value="#000000">
+        </label>
+        <label class="field-label">Stroke width
+          <input type="number" id="freehand-width" value="2" min="1" max="20">
+        </label>
+      </div>
+
+      <p class="format-note">Text/Image/Shape: click and drag to place, then drag the handle to resize. Draw: freehand directly on the page.</p>
+    </div>
+  </div>
+
+  <script>
+    window.PDF_FILENAME = {{ filename | tojson }};
+    window.PAGE_COUNT = {{ page_count | tojson }};
+  </script>
+  <script src="{{ url_for('static', filename='js/edit_pdf.js') }}"></script>
+{% endblock %}

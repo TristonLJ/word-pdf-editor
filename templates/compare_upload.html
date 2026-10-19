@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Compare PDF · Word → PDF Editor{% endblock %}
+{% block content %}
+  <section class="editor-toolbar">
+    <a class="back-link" href="{{ url_for('tools_hub') }}"><svg class="icon"><use href="#icon-arrow-left"/></svg> Back</a>
+    <h2>Compare PDF</h2>
+  </section>
+
+  <div class="action-card tool-form-card">
+    <span class="action-icon"><svg class="icon"><use href="#icon-columns"/></svg></span>
+    <p class="hint">Upload two PDFs to see a side-by-side text diff between them.</p>
+    <form action="/tools/compare-pdf" method="post" enctype="multipart/form-data">
+      <label class="field-label">
+        First version
+        <input type="file" name="file_a" accept=".pdf" required>
+      </label>
+      <label class="field-label">
+        Second version
+        <input type="file" name="file_b" accept=".pdf" required>
+      </label>
+      <button class="btn btn-primary btn-block" type="submit">
+        <svg class="icon"><use href="#icon-columns"/></svg> Compare
+      </button>
+    </form>
+  </div>
+{% endblock %}

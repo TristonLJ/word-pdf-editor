@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Sign {{ filename }} · Word → PDF Editor{% endblock %}
+{% block head %}
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
+{% endblock %}
+{% block content %}
+  <section class="editor-toolbar">
+    <a class="back-link" href="{{ url_for('index') }}"><svg class="icon"><use href="#icon-arrow-left"/></svg> Back</a>
+    <h2>Sign {{ filename }}</h2>
+  </section>
+
+  <section class="sign-layout">
+    <div class="sign-page-panel">
+      <div class="page-nav">
+        <button id="prev-page" class="btn btn-secondary btn-icon" type="button"><svg class="icon"><use href="#icon-chevron-left"/></svg></button>
+        <span id="page-indicator">Page 1 of {{ page_count }}</span>
+        <button id="next-page" class="btn btn-secondary btn-icon" type="button"><svg class="icon"><use href="#icon-chevron-right"/></svg></button>
+      </div>
+      <div id="page-container" class="page-container">
+        <img id="page-image" src="" alt="Document page">
+      </div>
+      <p class="format-note">Drag the signature to position it, drag the bottom-right handle to resize, then click "Sign &amp; Download".</p>
+    </div>
+
+    <div class="sign-pad-panel">
+      <h3>Your signature</h3>
+      <div class="pad-tabs">
+        <button id="tab-draw" class="pad-tab active" type="button"><svg class="icon"><use href="#icon-pen"/></svg> Draw</button>
+        <button id="tab-type" class="pad-tab" type="button"><svg class="icon"><use href="#icon-edit"/></svg> Type</button>
+      </div>
+
+      <div id="draw-pad" class="pad-mode">
+        <canvas id="draw-canvas" width="360" height="140"></canvas>
+        <button id="clear-draw" class="btn btn-secondary" type="button"><svg class="icon"><use href="#icon-trash"/></svg> Clear</button>
+      </div>
+
+      <div id="type-pad" class="pad-mode" hidden>
+        <input id="type-input" type="text" placeholder="Type your name">
+        <canvas id="type-canvas" width="360" height="140"></canvas>
+      </div>
+
+      <button id="add-signature" class="btn btn-secondary btn-block" type="button"><svg class="icon"><use href="#icon-plus"/></svg> Add to page</button>
+      <span id="status" class="status"></span>
+      <button id="sign-btn" class="btn btn-primary btn-block" type="button" disabled><svg class="icon"><use href="#icon-pen"/></svg> Sign &amp; Download</button>
+    </div>
+  </section>
+
+  <script>
+    window.PDF_FILENAME = {{ pdf_filename | tojson }};
+    window.SIGN_FILENAME = {{ filename | tojson }};
+    window.PAGE_COUNT = {{ page_count | tojson }};
+  </script>
+  <script src="{{ url_for('static', filename='js/sign.js') }}"></script>
+{% endblock %}

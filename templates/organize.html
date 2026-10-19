@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Organize {{ filename }} · Word → PDF Editor{% endblock %}
+{% block content %}
+  <section class="editor-toolbar">
+    <a class="back-link" href="{{ url_for('tools_hub') }}"><svg class="icon"><use href="#icon-arrow-left"/></svg> Back</a>
+    <h2>Organize {{ filename }}</h2>
+    <div class="editor-actions">
+      <span id="status" class="status"></span>
+      <button id="save-btn" class="btn btn-primary" type="button">
+        <svg class="icon"><use href="#icon-save"/></svg> Save
+      </button>
+    </div>
+  </section>
+
+  <p class="format-note">Drag thumbnails to reorder. Use the buttons on each page to rotate or remove it.</p>
+  <div id="page-grid" class="page-grid"></div>
+
+  <script>
+    window.PDF_FILENAME = {{ filename | tojson }};
+    window.PAGE_COUNT = {{ page_count | tojson }};
+  </script>
+  <script src="{{ url_for('static', filename='js/organize.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}PDF Tools · Word → PDF Editor{% endblock %}
+{% block content %}
+  <div class="page-header">
+    <span class="eyebrow">PDF Toolkit</span>
+    <h1>PDF Tools</h1>
+    <p>A local toolkit for merging, splitting, converting, and securing PDFs — nothing leaves your machine.</p>
+  </div>
+
+  <div class="hub-layout">
+    <nav class="hub-rail" id="hub-rail">
+      {% for category in category_order %}
+        {% if categories.get(category) %}
+          <a href="#cat-{{ category|lower }}" data-rail-link="cat-{{ category|lower }}">{{ category }}</a>
+        {% endif %}
+      {% endfor %}
+    </nav>
+
+    <div class="hub-content">
+      {% for category in category_order %}
+        {% if categories.get(category) %}
+          <section class="hub-section" id="cat-{{ category|lower }}">
+            <h2 class="tools-category-heading">{{ category }}</h2>
+            <div class="action-grid">
+              {% for tool in categories[category] %}
+                <a class="action-card tool-card" href="/tools/{{ tool.slug }}">
+                  <span class="action-icon"><svg class="icon"><use href="#{{ tool.icon }}"/></svg></span>
+                  <h2>{{ tool.label }}</h2>
+                  <p class="hint">{{ tool.hint }}</p>
+                </a>
+              {% endfor %}
+            </div>
+          </section>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}

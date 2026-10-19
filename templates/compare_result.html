@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Compare · Word → PDF Editor{% endblock %}
+{% block content %}
+  <section class="editor-toolbar">
+    <a class="back-link" href="{{ url_for('tools_hub') }}"><svg class="icon"><use href="#icon-arrow-left"/></svg> Back</a>
+    <h2>Comparing {{ name_a }} vs {{ name_b }}</h2>
+  </section>
+
+  <div class="diff-wrap">
+    {{ diff_table | safe }}
+  </div>
+{% endblock %}

@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+{% block title %}Documents · Word → PDF Editor{% endblock %}
+{% block content %}
+  <section class="hero">
+    <div class="grid-frame" aria-hidden="true">
+      <span class="grid-line grid-line-v1"></span>
+      <span class="grid-line grid-line-v2"></span>
+      <span class="grid-line grid-line-h"></span>
+      <span class="grid-mark grid-mark-1"></span>
+      <span class="grid-mark grid-mark-2"></span>
+    </div>
+    <div class="hero-content">
+      <span class="eyebrow">Local &middot; Private &middot; Yours</span>
+      <h1>Edit, Convert &amp; Sign Documents on Your Machine</h1>
+      <p>Word and PDF editing, conversion, and signing — entirely local. Nothing ever leaves your computer.</p>
+
+      <form id="upload-form" action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data">
+        <div class="dropzone" id="dropzone">
+          <span class="dropzone-icon"><svg class="icon"><use href="#icon-upload"/></svg></span>
+          <p class="dropzone-title">Drop a Word document here to upload</p>
+          <button class="btn btn-primary" type="button" id="dropzone-btn">Select a document</button>
+          <input type="file" name="file" id="dropzone-input" accept=".docx" hidden required>
+          <p class="dropzone-hint">.docx — opens straight into the editor</p>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <p class="section-label">More ways to work</p>
+  <h2 class="section-heading">Create, convert, and sign</h2>
+
+  <div class="action-grid">
+    <div class="action-card">
+      <span class="action-step">01</span>
+      <span class="action-icon"><svg class="icon"><use href="#icon-plus"/></svg></span>
+      <h2>New document</h2>
+      <p class="hint">Start writing from a blank page</p>
+      <form action="{{ url_for('new_document') }}" method="post">
+        <input type="text" name="filename" placeholder="my-document.docx" required>
+        <button class="btn btn-primary btn-block" type="submit">
+          <svg class="icon"><use href="#icon-plus"/></svg> Create
+        </button>
+      </form>
+    </div>
+
+    <div class="action-card">
+      <span class="action-step">02</span>
+      <span class="action-icon"><svg class="icon"><use href="#icon-refresh"/></svg></span>
+      <h2>Convert a PDF to Word</h2>
+      <p class="hint">Get an editable .docx from a PDF</p>
+      <form action="{{ url_for('upload_pdf_to_word') }}" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".pdf" required>
+        <button class="btn btn-primary btn-block" type="submit">
+          <svg class="icon"><use href="#icon-refresh"/></svg> Convert &amp; edit
+        </button>
+      </form>
+    </div>
+
+    <div class="action-card">
+      <span class="action-step">03</span>
+      <span class="action-icon"><svg class="icon"><use href="#icon-pen"/></svg></span>
+      <h2>Upload a PDF to sign</h2>
+      <p class="hint">Add a signature to a PDF you already have</p>
+      <form action="{{ url_for('upload_pdf') }}" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".pdf" required>
+        <button class="btn btn-primary btn-block" type="submit">
+          <svg class="icon"><use href="#icon-upload"/></svg> Upload
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div class="library" id="docx-library">
+    <div class="library-header">
+      <h2>Your documents</h2>
+      <span class="count-badge" id="docx-count">{{ documents | length }}</span>
+    </div>
+    <div class="library-rows" id="docx-rows">
+      {% for doc in documents %}
+        <div class="doc-row">
+          <span class="file-icon docx"><svg class="icon"><use href="#icon-file-docx"/></svg></span>
+          <div class="doc-info">
+            <span class="doc-name">{{ doc }}</span>
+          </div>
+          <div class="doc-actions">
+            <a href="{{ url_for('edit', filename=doc) }}"><svg class="icon"><use href="#icon-edit"/></svg> Edit</a>
+            <button class="export-btn" data-filename="{{ doc }}" type="button"><svg class="icon"><use href="#icon-file-pdf"/></svg> <span class="btn-label">Export PDF</span></button>
+            <a href="{{ url_for('sign_page', filename=doc) }}"><svg class="icon"><use href="#icon-pen"/></svg> Sign</a>
+            <a href="{{ url_for('download', filename=doc) }}"><svg class="icon"><use href="#icon-download"/></svg> .docx</a>
+            <a href="{{ url_for('download', filename=doc.rsplit('.docx', 1)[0] + '.pdf') }}"><svg class="icon"><use href="#icon-download"/></svg> PDF</a>
+            <span class="delete-wrap"><button class="delete-btn" data-filename="{{ doc }}" type="button"><svg class="icon"><use href="#icon-trash"/></svg> <span class="btn-label">Delete</span></button></span>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <p class="empty" id="docx-empty" {% if documents %}hidden{% endif %}>No documents yet — upload a .docx or create a new one above to get started.</p>
+  </div>
+
+  <div class="library" id="pdf-library" {% if not pdfs %}hidden{% endif %}>
+    <div class="library-header">
+      <h2>Your PDFs</h2>
+      <span class="count-badge" id="pdf-count">{{ pdfs | length }}</span>
+    </div>
+    <div class="library-rows" id="pdf-rows">
+      {% for pdf in pdfs %}
+        <div class="doc-row">
+          <span class="file-icon pdf"><svg class="icon"><use href="#icon-file-pdf"/></svg></span>
+          <div class="doc-info">
+            <span class="doc-name">{{ pdf }}</span>
+          </div>
+          <div class="doc-actions">
+            <a href="{{ url_for('sign_page', filename=pdf) }}"><svg class="icon"><use href="#icon-pen"/></svg> Sign</a>
+            <a href="{{ url_for('download', filename=pdf) }}"><svg class="icon"><use href="#icon-download"/></svg> Download</a>
+            <span class="delete-wrap"><button class="delete-btn" data-filename="{{ pdf }}" type="button"><svg class="icon"><use href="#icon-trash"/></svg> <span class="btn-label">Delete</span></button></span>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="library" id="xlsx-library" {% if not sheets %}hidden{% endif %}>
+    <div class="library-header">
+      <h2>Your Spreadsheets</h2>
+      <span class="count-badge" id="xlsx-count">{{ sheets | length }}</span>
+    </div>
+    <div class="library-rows" id="xlsx-rows">
+      {% for sheet in sheets %}
+        <div class="doc-row">
+          <span class="file-icon xlsx"><svg class="icon"><use href="#icon-table"/></svg></span>
+          <div class="doc-info">
+            <span class="doc-name">{{ sheet }}</span>
+          </div>
+          <div class="doc-actions">
+            <a href="{{ url_for('download', filename=sheet) }}"><svg class="icon"><use href="#icon-download"/></svg> Download</a>
+            <span class="delete-wrap"><button class="delete-btn" data-filename="{{ sheet }}" type="button"><svg class="icon"><use href="#icon-trash"/></svg> <span class="btn-label">Delete</span></button></span>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+{% endblock %}

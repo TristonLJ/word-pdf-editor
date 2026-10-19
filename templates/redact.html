@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Redact {{ filename }} · Word → PDF Editor{% endblock %}
+{% block content %}
+  <section class="editor-toolbar">
+    <a class="back-link" href="{{ url_for('tools_hub') }}"><svg class="icon"><use href="#icon-arrow-left"/></svg> Back</a>
+    <h2>Redact {{ filename }}</h2>
+    <div class="editor-actions">
+      <span id="status" class="status"></span>
+      <button id="apply-btn" class="btn btn-primary" type="button" disabled>
+        <svg class="icon"><use href="#icon-eye-off"/></svg> Apply redactions
+      </button>
+    </div>
+  </section>
+
+  <div class="page-nav">
+    <button id="prev-page" class="btn btn-secondary btn-icon" type="button"><svg class="icon"><use href="#icon-chevron-left"/></svg></button>
+    <span id="page-indicator">Page 1 of {{ page_count }}</span>
+    <button id="next-page" class="btn btn-secondary btn-icon" type="button"><svg class="icon"><use href="#icon-chevron-right"/></svg></button>
+  </div>
+  <p class="format-note">Drag on the page to draw a redaction box. Content underneath is permanently removed, not just covered.</p>
+  <div id="page-container" class="page-container">
+    <img id="page-image" src="" alt="Document page">
+  </div>
+
+  <script>
+    window.PDF_FILENAME = {{ filename | tojson }};
+    window.PAGE_COUNT = {{ page_count | tojson }};
+  </script>
+  <script src="{{ url_for('static', filename='js/redact.js') }}"></script>
+{% endblock %}
